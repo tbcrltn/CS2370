@@ -7,6 +7,7 @@
 
 using namespace std;
 
+// ===================== SAFE CHECK =====================
 bool is_number(const string &s) {
     if (s.empty()) return false;
     char *end;
@@ -14,7 +15,7 @@ bool is_number(const string &s) {
     return *end == '\0';
 }
 
-
+// ===================== STRUCTS =====================
 struct Customer {
     int id;
     string name;
@@ -37,7 +38,7 @@ struct LineItem {
     int quantity;
 };
 
-
+// ===================== PAYMENT SYSTEM =====================
 struct Payment {
     double amount = 0;
     virtual string print() = 0;
@@ -71,7 +72,7 @@ struct Wire : Payment {
     }
 };
 
-
+// ===================== ORDER =====================
 struct Order {
     int customer_id;
     int order_num;
@@ -101,14 +102,14 @@ struct Order {
     }
 };
 
-
+// ===================== GLOBALS =====================
 vector<Customer> customers;
 vector<Item> items;
 vector<Order> orders;
 
 
 
-
+// ===================== READ CUSTOMERS =====================
 void read_customers(const string& filename) {
     ifstream file(filename);
     string line;
@@ -134,7 +135,7 @@ void read_customers(const string& filename) {
     }
 }
 
-
+// ===================== READ ITEMS =====================
 void read_items(const string& filename) {
     ifstream file(filename);
     string line;
@@ -156,14 +157,14 @@ void read_items(const string& filename) {
     }
 }
 
-
+// ===================== READ ORDERS (PART 2) =====================
 void read_orders(const string& filename) {
     ifstream file(filename);
     string line;
 
     while (true) {
 
-       
+        // -------- ORDER LINE --------
         if (!getline(file, line)) break;
         if (line.empty()) continue;
 
@@ -187,6 +188,7 @@ void read_orders(const string& filename) {
             o.items.push_back(li);
         }
 
+        // -------- PAYMENT LINE --------
         if (!getline(file, line)) break;
 
         auto p = split(line, ',');
@@ -218,6 +220,7 @@ void read_orders(const string& filename) {
 
         o.payment = pay;
 
+        // -------- TOTAL --------
         double total = 0;
 
         for (auto &li : o.items) {
@@ -236,7 +239,7 @@ void read_orders(const string& filename) {
     }
 }
 
-
+// ===================== MAIN =====================
 int main() {
     read_customers("customers.txt");
     read_items("items.txt");
